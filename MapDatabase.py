@@ -1,7 +1,7 @@
 from MapNode import MapNode
 
 class MapDatabase:
-    def __init__():
+    def __init__(self):
         #a MapDatabase is a class which contains a list of MapNodes
         self._data = []
         return
@@ -17,8 +17,6 @@ class MapDatabase:
                 if(node.genFromJSON(line)):
                     mapNodes.append(node)
                     #print(f"imported node {index}")
-
-            removeDuplicates(mapNodes)
         except Error as e:
             print("Error in loading data")
             print(e)
@@ -78,14 +76,27 @@ class MapDatabase:
     def getEdgeNodes(self):
         filteredData = []
         for node in self._data:
+            hasEdge = False
             for edge in node.getEdges():
-                if(edge = "BBBBBBB"):
-                    return True
-        return False
+                if(edge == "BBBBBBB"):
+                    hasEdge = True
+            if(hasEdge):
+                filteredData.append(node)
+        return filteredData
     
     #method which finds edge pieces with an open wall along the edge of the puzzle
     def getEndpoints(self):
-        pass
+        filteredData = []
+        for node in self.getEdgeNodes():
+            isEndpoint = False
+            nodeWalls = node.getWalls()
+            for i in range(6):
+                if(nodeWalls[i] == "false" and node.getEdge(i) == "BBBBBBB"):
+                    isEndpoint = True
+
+            if(isEndpoint):
+                filteredData.append()  
+        return filteredData
         
 
         

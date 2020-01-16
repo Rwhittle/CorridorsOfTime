@@ -3,9 +3,9 @@ import json
 class MapNode:
     def genFromJSON(self, line):
         rawLine = line.split('\t')
-        print(rawLine[4])
+        #print(rawLine[4])
         if rawLine[4][0:8] != "Verified":
-            print(f"line not verified")
+            #print(f"line not verified")
             return False
         try:
             rawJson = json.loads(rawLine[1])
@@ -54,6 +54,9 @@ class MapNode:
     def getCenter(self):
         return self.center
 
+    def getWalls(self):
+        return self.walls
+
     def getLink(self, index):
         return self.links[index]
     
@@ -64,7 +67,7 @@ class MapNode:
         if(self.center != otherNode.center):
             return False
         for i in range(6):
-            if(node1.edges[i] != node2.edges[i]):
+            if(self.edges[i] != otherNode.edges[i]):
                return False
         return True
 
