@@ -1,47 +1,42 @@
 from MapNode import MapNode
 
+
 #a function to convert a tab delimited spreadsheet file into an array of the different pieces
-def import_data(path,include_noref = False):
+def import_data(path):
     databaseRaw = open(path)
-    mapNodes = {}
+    mapNodes = []
     index = 0
     for line in databaseRaw:
-        newNode = MapNode(line)
-        duplicateNode = False
-        for i in range(index):
-            if(isDuplicate(newNode, mapNodes[i])):
-                duplicateNode = True
-        if not duplicateNode:
-            mapNodes[index] = newNode
-            index = index + 1
+        node = MapNode()
+        if(node.genFromJSON(line)):
+            mapNodes.append(node)
+            #print(f"imported node {index}")
+
+    removeDuplicates(mapNodes)
     return mapNodes
 
 #find which other nodes a node links to
-def findLinks(index, nodes):
-    print(f"finding links for node {index}")
-    currentNode = nodes[index]
-    for j in range(len(nodes)):
-        #print(f"Testing node {j}")
-        node = nodes[j]
-        if node != currentNode:
+def findLinks(nodes,node):
+    for potentialNode in nodes:
+        if potentialNode != node:
             for i in range(6):
-                currentEdge = currentNode.getEdge(i)
-                if(currentNode.getLink(i) == None and currentEdge != "BBBBBBB"):
-                    potentialEdge = node.getEdge((i+3)%6)
+                currentEdge = node.getEdge(i)
+                if(node.getLink(i) == None and currentEdge != "BBBBBBB"):
+                    potentialEdge = potentialNode.getEdge((i+3)%6)
                     #print(f"vs {potentialEdge}")
                     if currentEdge == potentialEdge:
                         print(f"{currentEdge} matches {potentialEdge}")
-                        currentNode.setLink(i,node)
-                        node.setLink((i+3)%6,currentNode)
+                        node.setLink(i,potentialNode)
+                        potentialNode.setLink((i+3)%6,node)
                     #else:
                     #    print(f"{currentEdge} does not match {potentialEdge}")
 
 def findAllLinks(nodes):
-    for index in range(len(nodes)):
-        findLinks(index, nodes)
+    for node in nodes:
+        findLinks(nodes,node)
 
 def isDuplicate(node1, node2):
-    if(node1.center != node2.center or node1.openings != node2.openings):
+    if(node1.center != node2.center):
         return False
     for i in range(6):
         if(node1.edges[i] != node2.edges[i]):
@@ -50,9 +45,8 @@ def isDuplicate(node1, node2):
 
 def outputToFile(nodes, fileName):
     output = open(fileName, mode='w')
-    output.write("index,data\n")
-    for i in nodes.keys():
-        output.write(str(i)+","+nodes[i].toString()+"\n")
+    for node in nodes:
+        output.write(node.toString()+"\n")
     output.close()
     return
 
@@ -62,17 +56,27 @@ def solve(path):
     filteredData = removeUnlinked(data)
     outputToFile(filteredData, "solution.txt")
 
-def removeUnlinked(data):
-    filteredData = {}
-    for i in range(len(data)):
-        node = data[i]
+def removeUnlinked(nodes):
+    filteredData = []
+    for node in nodes:
         for j in range(6):
             if node.getLink(j) != None:
-                filteredData[i] = node
+                filteredData.append(node)
+                break
     return filteredData
-                
 
+def removeDuplicates(nodes):
+    filteredData = []
+    for node in nodes:
+        hasDuplicate = False
+        for otherNode in filteredData:
+            if(isDuplicate(node, otherNode)):
+               hasDuplicate = True
+        if(not hasDuplicate):
+               filteredData.append(node)
+    return filteredData
 
+        
 #def removeNoCenters(nodes):
 #    for node in nodes:
 #        if
