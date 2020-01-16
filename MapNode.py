@@ -5,7 +5,7 @@ class MapNode:
         self.center = splitLine[1]
         self.openings = splitLine[2]
         self.edges = splitLine[3:9]
-        self.links = [-1,-1,-1,-1,-1,-1]
+        self.links = [None,None,None,None,None,None]
 
     def getEdge(self, edgeNum):
         return self.edges[edgeNum]
@@ -27,4 +27,4 @@ class MapNode:
         self.links[index] = linkIndex
 
     def toString(self):
-        return f"URL:{self.imgURL},center:{self.center},openings:{self.openings},edges:{self.edges},links:{self.links}"
+        return f"URL:{self.imgURL},center:{self.center},openings:{self.openings},edges:{self.edges}"

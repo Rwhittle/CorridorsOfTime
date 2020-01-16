@@ -26,13 +26,13 @@ def findLinks(index, nodes):
         if node != currentNode:
             for i in range(6):
                 currentEdge = currentNode.getEdge(i)
-                if(currentNode.getLink(i) == -1 and currentEdge != "BBBBBBB"):
+                if(currentNode.getLink(i) == None and currentEdge != "BBBBBBB"):
                     potentialEdge = node.getEdge((i+3)%6)
                     #print(f"vs {potentialEdge}")
                     if currentEdge == potentialEdge:
                         print(f"{currentEdge} matches {potentialEdge}")
-                        currentNode.setLink(i,j)
-                        node.setLink((i+3)%6,index)
+                        currentNode.setLink(i,node)
+                        node.setLink((i+3)%6,currentNode)
                     #else:
                     #    print(f"{currentEdge} does not match {potentialEdge}")
 
@@ -51,7 +51,7 @@ def isDuplicate(node1, node2):
 def outputToFile(nodes, fileName):
     output = open(fileName, mode='w')
     output.write("index,data\n")
-    for i in range(len(nodes)):
+    for i in nodes.keys():
         output.write(str(i)+","+nodes[i].toString()+"\n")
     output.close()
     return
@@ -59,4 +59,20 @@ def outputToFile(nodes, fileName):
 def solve(path):
     data = import_data(path)
     findAllLinks(data)
-    outputToFile(data, "solution.txt")
+    filteredData = removeUnlinked(data)
+    outputToFile(filteredData, "solution.txt")
+
+def removeUnlinked(data):
+    filteredData = {}
+    for i in range(len(data)):
+        node = data[i]
+        for j in range(6):
+            if node.getLink(j) != -1:
+                filteredData[i] = node
+    return filteredData
+                
+
+
+#def removeNoCenters(nodes):
+#    for node in nodes:
+#        if
