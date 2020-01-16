@@ -21,7 +21,7 @@ def findLinks(index, nodes):
     print(f"finding links for node {index}")
     currentNode = nodes[index]
     for j in range(len(nodes)):
-        print(f"Testing node {j}")
+        #print(f"Testing node {j}")
         node = nodes[j]
         if node != currentNode:
             for i in range(6):
@@ -67,7 +67,7 @@ def removeUnlinked(data):
     for i in range(len(data)):
         node = data[i]
         for j in range(6):
-            if node.getLink(j) != -1:
+            if node.getLink(j) != None:
                 filteredData[i] = node
     return filteredData
                 
