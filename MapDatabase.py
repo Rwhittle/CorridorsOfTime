@@ -8,7 +8,7 @@ class MapDatabase:
     
 
     #a function to convert a tab delimited spreadsheet file into an array of the different pieces
-    def import_data(self,path):
+    def importData(self,path):
         try:
             databaseRaw = open(path)
             mapNodes = []
@@ -17,12 +17,19 @@ class MapDatabase:
                 if(node.genFromJSON(line)):
                     mapNodes.append(node)
                     #print(f"imported node {index}")
-        except Error as e:
+        except Exception as e:
             print("Error in loading data")
             print(e)
             return False
-
-        self._data = mapNodes
+        try:
+            self._data = mapNodes
+            self._data = self.getUnique()
+            self.linkAll()
+            self._data = self.getLinked()
+        except Exception as e:
+            print("error in linking data")
+            print(e)
+            return False
         return True
 
     #find which other nodes a node links to
@@ -43,7 +50,7 @@ class MapDatabase:
 
     def linkAll(self):
         for node in self._data:
-            findLinks(nodes,node)
+            self.findLinks(node)
 
     def outputToFile(nodes, fileName):
         output = open(fileName, mode='w')
@@ -97,6 +104,20 @@ class MapDatabase:
             if(isEndpoint):
                 filteredData.append(node)  
         return filteredData
+    
+    #depth first search algorithm
+    def DepthFirstSearch(self, root, target, visited = []):
+        visited.append(root)
+        path = ""
+        if(root.equals(target)):
+            path = root.getCenter
+        else:
+            for i in range(6):
+                #if there is an open wall link from the root that we haven't yet visited
+                if((not root.getWall(i) and root.getLink(i) != None) and (not root.getLink(i) in visited)):
+                    path = path + DepthFirstSearch(root.getLink(i), target, visited)
+
+        return path
         
 
         

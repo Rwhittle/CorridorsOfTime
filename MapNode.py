@@ -57,6 +57,9 @@ class MapNode:
     def getWalls(self):
         return self.walls
 
+    def getWall(self, index):
+        return self.walls[i]
+
     def getLink(self, index):
         return self.links[index]
     
