@@ -91,11 +91,11 @@ class MapDatabase:
             isEndpoint = False
             nodeWalls = node.getWalls()
             for i in range(6):
-                if(nodeWalls[i] == "false" and node.getEdge(i) == "BBBBBBB"):
+                if(not nodeWalls[i] and node.getEdge(i) == "BBBBBBB"):
                     isEndpoint = True
 
             if(isEndpoint):
-                filteredData.append()  
+                filteredData.append(node)  
         return filteredData
         
 
