@@ -3,9 +3,9 @@ import json
 class MapNode:
     def genFromJSON(self, line):
         rawLine = line.split('\t')
-        #print(rawLine[3])
-        if rawLine[3] != "Verified\n":
-            #print(f"line not verified")
+        print(rawLine[4])
+        if rawLine[4][0:8] != "Verified":
+            print(f"line not verified")
             return False
         try:
             rawJson = json.loads(rawLine[1])
@@ -41,6 +41,9 @@ class MapNode:
     def getEdge(self, edgeNum):
         return self.edges[edgeNum]
 
+    def getEdges(self):
+        return self.edges
+
     def getEdgeRot(self, edgeNum):
         edge = self.edges[edgeNum]
         rotEdge = ""
@@ -56,6 +59,14 @@ class MapNode:
     
     def setLink(self,index,linkIndex):
         self.links[index] = linkIndex
+
+    def equals(self, otherNode):
+        if(self.center != otherNode.center):
+            return False
+        for i in range(6):
+            if(node1.edges[i] != node2.edges[i]):
+               return False
+        return True
 
     def toString(self):
         return f"URL:{self.imgURL},center:{self.center},edges:{self.edges}"
