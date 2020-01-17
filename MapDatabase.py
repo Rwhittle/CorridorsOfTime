@@ -23,9 +23,12 @@ class MapDatabase:
             return False
         try:
             self._data = mapNodes
+            print("loaded "+str(len(self._data))+ " nodes")
             self._data = self.getUnique()
+            print(str(len(self._data))+" unique nodes")
             self.linkAll()
             self._data = self.getLinked()
+            print(str(len(self._data))+" linked nodes")
         except Exception as e:
             print("error in linking data")
             print(e)
@@ -106,19 +109,15 @@ class MapDatabase:
         return filteredData
     
     #depth first search algorithm
-    def DepthFirstSearch(self, root, target, visited = []):
+    def depthFirstSearch(self, root, target, visited = []):
         visited.append(root)
-        path = ""
         if(root.equals(target)):
-            path = root.getCenter
-        else:
-            for i in range(6):
-                #if there is an open wall link from the root that we haven't yet visited
-                if((not root.getWall(i) and root.getLink(i) != None) and (not root.getLink(i) in visited)):
-                    path = path + DepthFirstSearch(root.getLink(i), target, visited)
+            return root.getCenter()
+        for i in range(6):
+            #if there is an open wall link from the root that we haven't yet visited
+            if((not root.getWall(i) and root.getLink(i) != None) and (not root.getLink(i) in visited)):
+                search = self.depthFirstSearch(root.getLink(i), target, visited)
+                if search != "":
+                    return root.getCenter() + search
 
-        return path
-        
-
-        
-#def removeNoCenters(nodes):
+        return ""
