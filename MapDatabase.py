@@ -8,13 +8,13 @@ class MapDatabase:
     
 
     #a function to convert a tab delimited spreadsheet file into an array of the different pieces
-    def importData(self,path):
+    def importData(self,path,requireVerified = True):
         try:
             databaseRaw = open(path)
             mapNodes = []
             for line in databaseRaw:
                 node = MapNode()
-                if(node.genFromJSON(line)):
+                if(node.genFromJSON(line,requireVerified)):
                     mapNodes.append(node)
                     #print(f"imported node {index}")
         except Exception as e:

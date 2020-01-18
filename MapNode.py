@@ -1,10 +1,10 @@
 import json
 
 class MapNode:
-    def genFromJSON(self, line):
+    def genFromJSON(self, line, requireVerified = True):
         rawLine = line.split('\t')
         #print(rawLine[4])
-        if rawLine[4][0:8] != "Verified":
+        if rawLine[4][0:8] != "Verified" and requireVerified:
             #print(f"line not verified")
             return False
         try:
